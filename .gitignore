@@ -1,0 +1,38 @@
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Ignore environment variables & secrets
+.env
+config.json
+credentials.json
+
+# Model weights & checkpoints
+*.pt
+*.pth
+
+# Training artifacts
+runs/
+*.onnx
+*.tflite
+*.torchscript
+*.engine
+
+# Dataset folders
+raw_data/
+yolo_data/
+test_images/
+
+# YOLO cache files
+*.cache

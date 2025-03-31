@@ -1,0 +1,19 @@
+# Ignore training data
+raw_data/
+yolo_data/
+runs/
+
+# Ignore common generated files
+__pycache__/
+.ipynb_checkpoints/
+*.log
+
+# Ignore notebooks 
+*.ipynb
+
+# Ignore model files during build 
+*.pt
+
+# Python virtual environment
+.venv/
+env/
