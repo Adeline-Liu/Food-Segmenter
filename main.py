@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from ultralytics import YOLO
 from PIL import Image
 import io
@@ -6,10 +6,14 @@ import numpy as np
 import torch
 from typing import List
 
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
+templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
-# setup
+# SETUP
 # device = "mps" if torch.backends.mps.is_available() else "cpu"
 device = "cpu"
 # model = YOLO("yolov8s-seg.pt")
@@ -17,9 +21,9 @@ model = YOLO("models/best.pt")
 model.to(device)
 
 
-@app.get("/")
-async def root():
-    return {"message": "Food segmenter app"}
+@app.get("/", response_class=HTMLResponse)
+async def serve_ui(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 def segment_and_calculate_area(image_bytes):

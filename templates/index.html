@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Food Segmenter</title>
+</head>
+<body>
+  <h1>Food Segmenter</h1>
+
+  <h2>Single Image</h2>
+  <form id="single-form" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*" required />
+    <button type="submit">Segment One</button>
+  </form>
+
+  <div id="single-results"></div>
+
+  <hr>
+
+  <h2>Batch Images</h2>
+  <form id="batch-form" enctype="multipart/form-data">
+    <div id="batch-files">
+      <input type="file" name="files" accept="image/*" required />
+    </div>
+    <button type="button" id="add-more">➕ Add Another File</button>
+    <button type="submit">Segment Batch</button>
+  </form>
+
+  <div id="batch-results"></div>
+
+  <script>
+    const singleForm = document.getElementById('single-form');
+    const singleResults = document.getElementById('single-results');
+
+    const batchForm = document.getElementById('batch-form');
+    const batchFilesDiv = document.getElementById('batch-files');
+    const batchResults = document.getElementById('batch-results');
+    const addMoreBtn = document.getElementById('add-more');
+
+    addMoreBtn.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.name = 'files';
+      input.accept = 'image/*';
+      batchFilesDiv.appendChild(document.createElement('br'));
+      batchFilesDiv.appendChild(input);
+    });
+
+    singleForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      singleResults.innerHTML = "Processing...";
+      const formData = new FormData(singleForm);
+
+      try {
+        const res = await fetch('/segment', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.results.length === 0) {
+          singleResults.innerHTML = "No food items detected.";
+        } else {
+          singleResults.innerHTML = "<ul>" + data.results.map(item =>
+            `<li>${item.class}: ${item.area} pixels</li>`
+          ).join('') + "</ul>";
+        }
+      } catch (err) {
+        singleResults.innerHTML = "Error: " + err;
+      }
+    });
+
+    batchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      batchResults.innerHTML = "Processing...";
+      const formData = new FormData(batchForm);
+
+      try {
+        const res = await fetch('/segment_batch', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        batchResults.innerHTML = data.map(img => {
+          const items = img.results.length > 0
+            ? "<ul>" + img.results.map(r =>
+              `<li>${r.class}: ${r.area} pixels</li>`
+            ).join('') + "</ul>"
+            : "<p>No food items detected.</p>";
+
+          return `<h4>${img.filename}</h4>${items}`;
+        }).join('<hr>');
+      } catch (err) {
+        batchResults.innerHTML = "Error: " + err;
+      }
+    });
+  </script>
+</body>
+</html>
