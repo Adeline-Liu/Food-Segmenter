@@ -18,9 +18,9 @@ __pycache__/
 config.json
 credentials.json
 
-# Model weights & checkpoints
-*.pt
-*.pth
+# # Model weights & checkpoints
+# *.pt
+# *.pth
 
 # Training artifacts
 runs/

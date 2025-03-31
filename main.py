@@ -14,13 +14,14 @@ templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 
 # SETUP
-# device = "mps" if torch.backends.mps.is_available() else "cpu"
 device = "cpu"
+# device = "mps" if torch.backends.mps.is_available() else "cpu"
 # model = YOLO("yolov8s-seg.pt")
 model = YOLO("models/best.pt") 
 model.to(device)
 
 
+# basic UI
 @app.get("/", response_class=HTMLResponse)
 async def serve_ui(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -33,7 +34,7 @@ def segment_and_calculate_area(image_bytes):
     response = []
 
     if results.masks is not None:
-        # convert all masks from tensors to NumPy arrays
+        # convert all masks from tensors to arrays
         masks = results.masks.data.cpu().numpy()
 
         class_ids = results.boxes.cls.cpu().numpy()
