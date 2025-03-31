@@ -25,15 +25,16 @@ Option 2: Manual
 1. Make a virtual environment:
    
    `python -m venv .venv`
+   
    `source .venv/bin/activate`
 
-2. Install dependencies:
+3. Install dependencies:
    
    `pip install -r requirements.txt`
 
-3. Run the app:
+4. Run the app:
    
-   `gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker`
+   `gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker`
 
 ## Test
 
