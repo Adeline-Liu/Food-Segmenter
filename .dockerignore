@@ -11,8 +11,8 @@ __pycache__/
 # Ignore notebooks 
 *.ipynb
 
-# Ignore model files during build 
-*.pt
+# # Ignore model files during build 
+# *.pt
 
 # Python virtual environment
 .venv/
