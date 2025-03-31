@@ -32,7 +32,7 @@ runs/
 # Dataset folders
 raw_data/
 yolo_data/
-test_images/
+# test_images/
 
 # YOLO cache files
 *.cache
